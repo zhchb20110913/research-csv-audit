@@ -1,0 +1,11 @@
+sample_id,temperature_c,reaction_time_s,yield_percent,group
+S01,22.1,10.2,81.4,control
+S02,22.0,10.5,82.1,control
+S03,22.3,10.1,80.9,control
+S04,22.2,,81.8,control
+S05,22.1,10.4,120.0,control
+S06,37.0,7.8,91.5,treatment
+S07,37.2,7.7,92.0,treatment
+S08,36.9,7.9,91.2,treatment
+S09,37.1,7.6,91.8,treatment
+S10,37.0,7.8,91.6,treatment

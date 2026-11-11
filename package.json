@@ -1,0 +1,24 @@
+{
+  "name": "research-csv-audit",
+  "version": "1.0.0",
+  "description": "A dependency-free CLI for auditing numeric columns in research CSV files.",
+  "type": "module",
+  "bin": {
+    "research-csv-audit": "bin/research-csv-audit.js"
+  },
+  "scripts": {
+    "test": "node --test",
+    "demo": "node bin/research-csv-audit.js samples/experiment.csv --output reports/audit.md"
+  },
+  "keywords": [
+    "research",
+    "csv",
+    "data-quality",
+    "outlier"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  }
+}
+
