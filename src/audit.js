@@ -125,3 +125,7 @@ export function renderMarkdown(audit, sourceName = "dataset.csv") {
   return lines.join("\n");
 }
 
+export function renderJson(audit, sourceName = "dataset.csv") {
+  return `${JSON.stringify({ source: sourceName, ...audit }, null, 2)}\n`;
+}
+

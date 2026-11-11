@@ -2,7 +2,7 @@
 
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { basename, dirname, resolve } from "node:path";
-import { auditTable, renderMarkdown } from "../src/audit.js";
+import { auditTable, renderJson, renderMarkdown } from "../src/audit.js";
 import { parseCsv } from "../src/csv.js";
 
 function usage() {
@@ -13,12 +13,13 @@ Usage:
 
 Options:
   --delimiter <char>  CSV delimiter (default: comma)
-  --output <path>     Write the Markdown report to a file
+  --format <type>     Report format: markdown or json (default: markdown)
+  --output <path>     Write the report to a file
   --help              Show this help message`;
 }
 
 function parseArguments(argumentsList) {
-  const options = { delimiter: ",", output: null, input: null };
+  const options = { delimiter: ",", format: "markdown", output: null, input: null };
 
   for (let index = 0; index < argumentsList.length; index += 1) {
     const argument = argumentsList[index];
@@ -30,6 +31,9 @@ function parseArguments(argumentsList) {
     } else if (argument === "--output") {
       options.output = argumentsList[++index];
       if (!options.output) throw new Error("--output requires a path");
+    } else if (argument === "--format") {
+      options.format = argumentsList[++index];
+      if (!options.format) throw new Error("--format requires a value");
     } else if (argument.startsWith("--")) {
       throw new Error(`Unknown option: ${argument}`);
     } else if (options.input === null) {
@@ -37,6 +41,10 @@ function parseArguments(argumentsList) {
     } else {
       throw new Error(`Unexpected argument: ${argument}`);
     }
+  }
+
+  if (!["markdown", "json"].includes(options.format)) {
+    throw new Error("--format must be either markdown or json");
   }
 
   return options;
@@ -56,7 +64,9 @@ async function main() {
   const csvText = await readFile(inputPath, "utf8");
   const { headers, rows } = parseCsv(csvText, options.delimiter);
   const audit = auditTable(headers, rows);
-  const report = renderMarkdown(audit, basename(inputPath));
+  const report = options.format === "json"
+    ? renderJson(audit, basename(inputPath))
+    : renderMarkdown(audit, basename(inputPath));
 
   if (options.output) {
     const outputPath = resolve(options.output);

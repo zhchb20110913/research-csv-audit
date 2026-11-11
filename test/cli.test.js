@@ -26,3 +26,28 @@ test("CLI writes a Markdown audit report", async () => {
   }
 });
 
+test("CLI writes a JSON audit report", async () => {
+  const directory = await mkdtemp(join(tmpdir(), "research-csv-audit-json-"));
+  const inputPath = join(directory, "input.csv");
+  const outputPath = join(directory, "audit.json");
+
+  try {
+    await writeFile(inputPath, "id,value\nA,1\nB,2\n", "utf8");
+    const cliPath = resolve("bin/research-csv-audit.js");
+    await execFileAsync(process.execPath, [
+      cliPath,
+      inputPath,
+      "--format",
+      "json",
+      "--output",
+      outputPath,
+    ]);
+    const report = JSON.parse(await readFile(outputPath, "utf8"));
+
+    assert.equal(report.source, "input.csv");
+    assert.equal(report.numericColumns[0].mean, 1.5);
+  } finally {
+    await rm(directory, { recursive: true, force: true });
+  }
+});
+
