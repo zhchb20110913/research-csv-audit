@@ -1,6 +1,6 @@
 import test from "node:test";
 import assert from "node:assert/strict";
-import { auditTable, renderMarkdown } from "../src/audit.js";
+import { auditTable, renderJson, renderMarkdown } from "../src/audit.js";
 
 test("detects numeric columns, missing values, and IQR outliers", () => {
   const headers = ["sample", "measurement"];
@@ -33,5 +33,13 @@ test("renders a readable Markdown report", () => {
   assert.match(report, /Research CSV Audit Report/);
   assert.match(report, /experiment\.csv/);
   assert.match(report, /\| value \| 2 \| 1 \|/);
+});
+
+test("renders machine-readable JSON", () => {
+  const result = auditTable(["value"], [["1"], ["2"]]);
+  const report = JSON.parse(renderJson(result, "experiment.csv"));
+
+  assert.equal(report.source, "experiment.csv");
+  assert.equal(report.numericColumns[0].mean, 1.5);
 });
 

@@ -22,6 +22,12 @@ node bin/research-csv-audit.js samples/experiment.csv
 node bin/research-csv-audit.js samples/experiment.csv --output reports/audit.md
 ```
 
+输出便于后续脚本处理的 JSON：
+
+```bash
+node bin/research-csv-audit.js samples/experiment.csv --format json --output reports/audit.json
+```
+
 ## 输出指标
 
 每个自动识别出的数值列包含以下指标：
