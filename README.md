@@ -142,7 +142,7 @@ dependencies.
   number; mixed text-and-number columns are skipped.
 - Files are read into memory, so the current version targets small and medium
   research datasets rather than multi-gigabyte exports.
-- IQR flags are screening signals, not automatic exclusion decisions.
+- IQR flags are screening signals, not automatic exclusion decisions
 
 ## License
 
